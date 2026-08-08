@@ -12,6 +12,9 @@
     <groupId>com.bitejiuyeke</groupId>
     <artifactId>frameworkjava</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>zyh-mstemplate</module>
+    </modules>
     <version>1.0-SNAPSHOT</version>
 <!--    <modules>-->
 <!--        <module>bite-admin</module>-->
