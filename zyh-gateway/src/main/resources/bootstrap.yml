@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: zyh-gateway
+  profiles:
+    active: ${RUN_ENV}
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: bite@123
+        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        server-addr: ${NACOS_ADDR}
+      config:
+        username: nacos
+        password: bite@123
+        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        server-addr: ${NACOS_ADDR}
+        file-extension: yaml

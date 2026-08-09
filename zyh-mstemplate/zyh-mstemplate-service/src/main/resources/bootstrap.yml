@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: zyh-mstemplate
+  profiles:
+    active: ${RUN_ENV}
+
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: bite@123
+        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        server-addr: ${NACOS_ADDR}
+
+      config:
+        username: nacos
+        password: bite@123
+        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        server-addr: ${NACOS_ADDR}
+        file-extension: yaml
+
+# 这⼀配置⽤于定义应⽤在控制台输出⽇志时所遵循的格式规则
+#logging:
+#  pattern:
+#    console: '[%thread] %-5level %logger{36} - %msg%n'
