@@ -16,7 +16,6 @@
         <module>zyh-mstemplate</module>
         <module>zyh-gateway</module>
         <module>zyh-common</module>
-        <module>zyh-common/zyh-common-core</module>
     </modules>
 
     <version>1.0-SNAPSHOT</version>

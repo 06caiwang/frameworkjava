@@ -9,15 +9,20 @@ spring:
       discovery:
         username: nacos
         password: bite@123
-        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        namespace: frameworkjava-${RUN_ENV}
         server-addr: ${NACOS_ADDR}
 
       config:
         username: nacos
         password: bite@123
-        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        namespace: frameworkjava-${RUN_ENV}
         server-addr: ${NACOS_ADDR}
         file-extension: yaml
+        shared-configs:
+          - data-id: share-redis-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+          - data-id: share-rabbitmq-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
 
 # 这⼀配置⽤于定义应⽤在控制台输出⽇志时所遵循的格式规则
 #logging:

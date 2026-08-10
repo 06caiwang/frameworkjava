@@ -1,6 +1,6 @@
 package com.zyh.commoncore.config;
 
-import com.zyh.commoncore.domain.enums.RejectType;
+import com.zyh.commoncore.enums.RejectType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

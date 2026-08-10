@@ -10,11 +10,11 @@ spring:
       discovery:
         username: nacos
         password: bite@123
-        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        namespace: frameworkjava-${RUN_ENV}
         server-addr: ${NACOS_ADDR}
       config:
         username: nacos
         password: bite@123
-        namespace: 972d99ce-2f94-49ea-aa37-6c5cb9f33e65
+        namespace: frameworkjava-${RUN_ENV}
         server-addr: ${NACOS_ADDR}
         file-extension: yaml

@@ -1,1 +1,2 @@
 com.zyh.commoncore.config.ThreadPoolConfig
+com.zyh.commoncore.config.RestTemplateConfig

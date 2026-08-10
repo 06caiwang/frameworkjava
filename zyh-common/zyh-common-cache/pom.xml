@@ -5,20 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.bitejiuyeke</groupId>
-        <artifactId>frameworkjava</artifactId>
+        <artifactId>zyh-common</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zyh-common</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>zyh-common-core</module>
-        <module>zyh-common-domain</module>
-        <module>zyh-common-security</module>
-        <module>zyh-common-redis</module>
-        <module>zyh-common-cache</module>
-        <module>zyh-common-rabbitmq</module>
-    </modules>
+    <artifactId>zyh-common-cache</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -26,4 +17,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.bitejiuyeke</groupId>
+            <artifactId>zyh-common-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+    </dependencies>
 </project>
