@@ -18,6 +18,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(value = "storage.type", havingValue = "oss")
 public class OSSAutoConfiguration {
+
+    private OSSClient ossClient;
+
     /**
      * 初始化客户端
      * @param prop oss配置
@@ -26,9 +29,6 @@ public class OSSAutoConfiguration {
      */
     @Bean
     public OSSClient ossClient(OSSProperties prop) throws ClientException {
-        // ref: https://help.aliyun.com/document_detail/32011.html?spm=a2c4g.32010.0.0.33386a03cVRCNW
-//        EnvironmentVariableCredentialsProvider credentialsProvider =
-//                CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
 
         DefaultCredentialProvider credentialsProvider = CredentialsProviderFactory.newDefaultCredentialProvider(
                 prop.getAccessKeyId(), prop.getAccessKeySecret());
