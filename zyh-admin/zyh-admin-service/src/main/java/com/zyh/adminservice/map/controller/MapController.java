@@ -7,12 +7,9 @@ import com.zyh.adminservice.map.service.IMapService;
 import com.zyh.commoncore.utils.BeanCopyUtil;
 import com.zyh.commondomain.domain.R;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import org.w3c.dom.ls.LSInput;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,5 +64,20 @@ public class MapController implements MapFeignClient {
 
         //4. 返回结果
         return R.ok(result);
+    }
+
+    @Override
+    public R<List<RegionVO>> getChildrenCityList(Long parentId) {
+        // 1. 打印日志
+        log.info("getChildrenCityList: {parentId(Long)}");
+
+        // 2. 调用service
+        List<SysRegionDTO> lsit = mapService.getChildrenCityList(parentId);
+
+        // 3. 转换成VO
+        List<RegionVO> response = BeanCopyUtil.copyListProperties(lsit, RegionVO::new);
+
+        // 4. 返回结果
+        return R.ok(response);
     }
 }

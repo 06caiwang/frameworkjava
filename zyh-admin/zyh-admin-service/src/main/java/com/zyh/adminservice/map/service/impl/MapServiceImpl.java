@@ -3,6 +3,7 @@ package com.zyh.adminservice.map.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.zyh.adminapi.feign.map.constants.MapConstants;
+import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
 import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
 import com.zyh.adminservice.map.domain.entity.SysRegion;
 import com.zyh.adminservice.map.mapper.RegionMapper;
@@ -245,5 +246,54 @@ public class MapServiceImpl implements IMapService {
 
         // 返回结果
         return map;
+    }
+
+    /**
+     * 根据城市id获取城市的区信息
+     * @param parentId 城市id
+     * @return 城市市区信息
+     */
+    @Override
+    public List<SysRegionDTO> getChildrenCityList(Long parentId) {
+        // 1. 设置缓存的key
+        String key = MapConstants.CACHE_MAP_CITY_CHILDREN_KEY + parentId;
+
+        // 2. 查询缓存
+        List<SysRegionDTO> cache = CacheUtil.getL2Cache(
+                redisService,
+                key,
+                new TypeReference<List<SysRegionDTO>>() {},
+                caffeineCache
+        );
+
+        // 3. 存在
+        if (CollectionUtils.isNotEmpty(cache)) {
+            return cache;
+        }
+
+        // 4. 不存在，查询数据库
+        List<SysRegion> list = regionMapper.selectAllRegion();
+        List<SysRegionDTO> result = new ArrayList<>();
+        for (SysRegion sysRegion : list) {
+            Long id = sysRegion.getParentId();
+            if (id != null && id.equals(parentId)) {
+                SysRegionDTO sysRegionDTO = new SysRegionDTO();
+                BeanUtils.copyProperties(sysRegion, sysRegionDTO);
+                result.add(sysRegionDTO);
+            }
+        }
+
+        // 5. 设置缓存
+        CacheUtil.setL2Cache(
+                redisService,
+                key,
+                result,
+                caffeineCache,
+                MapConstants.CACHE_TIMEOUT,
+                TimeUnit.MINUTES
+        );
+
+        // 6. 返回
+        return result;
     }
 }

@@ -21,4 +21,11 @@ public interface IMapService {
      * @return 排序好的城市列表
      */
     Map<String, List<SysRegionDTO>> getCityListByPingYin();
+
+    /**
+     * 获取城市的区信息
+     * @param parentId 城市id
+     * @return 城市市区信息
+     */
+    List<SysRegionDTO> getChildrenCityList(Long parentId);
 }

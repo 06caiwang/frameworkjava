@@ -4,6 +4,7 @@ import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
 import com.zyh.commondomain.domain.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,12 @@ public interface MapFeignClient {
      */
     @GetMapping("map/city_pinyin_list")
     public R<Map<String, List<RegionVO>>> getCityListByPingYin();
+
+    /**
+     * 获取城市的区信息
+     * @param parentId 城市id
+     * @return 城市市区信息
+     */
+    @GetMapping("map/region_children_list")
+    public R<List<RegionVO>> getChildrenCityList(@RequestParam Long parentId);
 }

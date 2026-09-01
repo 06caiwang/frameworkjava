@@ -24,4 +24,9 @@ public class MapConstants {
      * 城市列表（拼音）key
      */
     public static String CACHE_MAP_CITY_PINYIN_KEY = "map:city:pinyin:id";
+
+    /**
+     * 城市区划缓存key
+     */
+    public final static  String CACHE_MAP_CITY_CHILDREN_KEY = "map:city:children:";
 }
