@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,8 +49,58 @@ public class MapServiceImpl implements IMapService {
 
         // 2. 在服务启动期间，缓存城市列表
         loadCityList(list);
+
+        // 3. 在服务启动期间，缓存城市拼音归类的列表
+        loadCityPinyinList(list);
     }
 
+    /**
+     * 缓存城市拼音归类的列表
+     * @param list 所有城市列表
+     */
+    private void loadCityPinyinList(List<SysRegion> list) {
+        // 1. 声明一个 map来保存结果
+        Map<String, List<SysRegionDTO>> map = new TreeMap<>();
+
+        // 2. 遍历数据库中的结果，对结果进行处理
+        for (SysRegion region : list) {
+            if (region.getLevel().equals(MapConstants.CITY_LEVEL)) {
+                // 类型转换
+                SysRegionDTO sysRegionDTO = new SysRegionDTO();
+                BeanUtils.copyProperties(region, sysRegionDTO);
+
+                // 获取该城市拼音的首字母
+                String firstChar = sysRegionDTO.getPinyin().toUpperCase().substring(0, 1);
+
+                // 将符合首字母的城市进行归类
+                // 如果有这个首字母直接加入
+                // 否则就添加新的 键值对
+                // {"A": [], "B":[], ...}
+                if (map.containsKey(firstChar)) {
+                    map.get(firstChar).add(sysRegionDTO);
+                } else {
+                    List<SysRegionDTO> regionDTOS = new ArrayList<>();
+                    regionDTOS.add(sysRegionDTO);
+                    map.put(firstChar, regionDTOS);
+                }
+            }
+        }
+
+        // 3. 设置缓存
+        CacheUtil.setL2Cache(
+                redisService,
+                MapConstants.CACHE_MAP_CITY_PINYIN_KEY,
+                map,
+                caffeineCache,
+                MapConstants.CACHE_TIMEOUT,
+                TimeUnit.MINUTES
+        );
+    }
+
+    /**
+     * 缓存城市列表
+     * @param list 所有城市列表
+     */
     private void loadCityList(List<SysRegion> list) {
         // 声明对象
         List<SysRegionDTO> sysRegionDTOS = new ArrayList<>();
@@ -81,6 +133,7 @@ public class MapServiceImpl implements IMapService {
         List<SysRegion> sysRegions = regionMapper.selectAllRegion();
         // 2. 转换成 DTO
         List<SysRegionDTO> sysRegionDTOS = new ArrayList<>();
+
 
         for (SysRegion sysRegion:sysRegions) {
             if (sysRegion.getLevel().equals(MapConstants.CITY_LEVEL)) {
@@ -174,5 +227,23 @@ public class MapServiceImpl implements IMapService {
                 new TypeReference<List<SysRegionDTO>>() {},
                 caffeineCache);
         return cache;
+    }
+
+    /**
+     * 获取城市的拼音排序列表
+     * @return 排序好的城市列表
+     */
+    @Override
+    public Map<String, List<SysRegionDTO>> getCityListByPingYin() {
+        // 从缓存中获取城市列表
+        Map<String, List<SysRegionDTO>> map = CacheUtil.getL2Cache(
+                redisService,
+                MapConstants.CACHE_MAP_CITY_PINYIN_KEY,
+                new TypeReference<Map<String, List<SysRegionDTO>>>() {},
+                caffeineCache
+        );
+
+        // 返回结果
+        return map;
     }
 }

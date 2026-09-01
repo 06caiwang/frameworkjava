@@ -19,4 +19,9 @@ public class MapConstants {
      * 本地缓存有效时间
      */
     public final static Long CACHE_TIMEOUT = 120L;
+
+    /**
+     * 城市列表（拼音）key
+     */
+    public static String CACHE_MAP_CITY_PINYIN_KEY = "map:city:pinyin:id";
 }

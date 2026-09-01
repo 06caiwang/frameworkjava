@@ -10,6 +10,11 @@ import lombok.Data;
 @Data
 public class SysRegion {
     /**
+     * 区域id
+     */
+    private Long id;
+
+    /**
      * 区域名称
      */
     private String name;

@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyuheng
@@ -21,5 +22,10 @@ public interface MapFeignClient {
     @GetMapping("/map/city_list")
     public R<List<RegionVO>> getRegionList();
 
-
+    /**
+     * 获取城市的拼音排序列表
+     * @return 排序好的城市列表
+     */
+    @GetMapping("map/city_pinyin_list")
+    public R<Map<String, List<RegionVO>>> getCityListByPingYin();
 }
