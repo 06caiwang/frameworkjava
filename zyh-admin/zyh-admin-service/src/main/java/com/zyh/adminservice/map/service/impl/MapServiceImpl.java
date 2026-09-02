@@ -296,4 +296,39 @@ public class MapServiceImpl implements IMapService {
         // 6. 返回
         return result;
     }
+
+    @Override
+    public List<SysRegionDTO> getHotCityList() {
+        // 1. 查询缓存
+        CacheUtil.getL2Cache(
+                redisService,
+                MapConstants.CACHE_MAP_HOT_CITY,
+                new TypeReference<SysRegionDTO>() {},
+                caffeineCache
+        );
+
+        // 2. 设置六个热门城市
+        // todo Mock 6个假数据，后期修改
+        List<Long> idList = List.of(1L,2L,3L,4L,5L,6L);
+
+        // 3 查询热门城市结果
+        List<SysRegionDTO> list = new ArrayList<>();
+        for (SysRegion sysRegion : regionMapper.selectBatchIds(idList)) {
+            SysRegionDTO sysRegionDTO = new SysRegionDTO();
+            BeanUtils.copyProperties(sysRegion, sysRegionDTO);
+            list.add(sysRegionDTO);
+        }
+
+        // 4 设置缓存
+        CacheUtil.setL2Cache(
+                redisService,
+                MapConstants.CACHE_MAP_HOT_CITY,
+                list, caffeineCache,
+                MapConstants.CACHE_TIMEOUT,
+                TimeUnit.MINUTES
+        );
+
+        // 5. 返回结果
+        return list;
+    }
 }

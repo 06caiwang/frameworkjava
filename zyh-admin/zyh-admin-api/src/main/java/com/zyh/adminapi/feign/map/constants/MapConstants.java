@@ -29,4 +29,10 @@ public class MapConstants {
      * 城市区划缓存key
      */
     public final static  String CACHE_MAP_CITY_CHILDREN_KEY = "map:city:children:";
+
+    /**
+     * 热门城市缓存key
+     */
+    public final static String CACHE_MAP_HOT_CITY = "map:city:hot";
+
 }

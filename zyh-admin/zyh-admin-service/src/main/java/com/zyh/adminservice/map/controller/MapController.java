@@ -66,16 +66,40 @@ public class MapController implements MapFeignClient {
         return R.ok(result);
     }
 
+    /**
+     * 根据父级区域ID获取子集区域列表
+     * @param parentId 父级区域ID
+     * @return 子集区域列表
+     */
     @Override
     public R<List<RegionVO>> getChildrenCityList(Long parentId) {
         // 1. 打印日志
         log.info("getChildrenCityList: {parentId(Long)}");
 
         // 2. 调用service
-        List<SysRegionDTO> lsit = mapService.getChildrenCityList(parentId);
+        List<SysRegionDTO> list = mapService.getChildrenCityList(parentId);
 
         // 3. 转换成VO
-        List<RegionVO> response = BeanCopyUtil.copyListProperties(lsit, RegionVO::new);
+        List<RegionVO> response = BeanCopyUtil.copyListProperties(list, RegionVO::new);
+
+        // 4. 返回结果
+        return R.ok(response);
+    }
+
+    /**
+     * 获取热门城市列表
+     * @return 城市列表
+     */
+    @Override
+    public R<List<RegionVO>> getHotCityList() {
+        // 1. 打印日志
+        log.info("getHotCityList NoArgs");
+
+        // 2. 调用service
+        List<SysRegionDTO> list = mapService.getHotCityList();
+
+        // 3. 转换VO
+        List<RegionVO> response = BeanCopyUtil.copyListProperties(list, RegionVO::new);
 
         // 4. 返回结果
         return R.ok(response);

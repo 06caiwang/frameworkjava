@@ -37,4 +37,12 @@ public interface MapFeignClient {
      */
     @GetMapping("map/region_children_list")
     public R<List<RegionVO>> getChildrenCityList(@RequestParam Long parentId);
+
+    /**
+     * 获取热门城市列表
+     * @return 城市列表
+     */
+    @GetMapping("/map/city_hot_list")
+    R<List<RegionVO>> getHotCityList();
+
 }

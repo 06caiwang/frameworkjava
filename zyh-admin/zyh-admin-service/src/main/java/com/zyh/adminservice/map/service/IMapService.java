@@ -28,4 +28,10 @@ public interface IMapService {
      * @return 城市市区信息
      */
     List<SysRegionDTO> getChildrenCityList(Long parentId);
+
+    /**
+     * 获取热门城市列表
+     * @return 城市列表
+     */
+    List<SysRegionDTO> getHotCityList();
 }
