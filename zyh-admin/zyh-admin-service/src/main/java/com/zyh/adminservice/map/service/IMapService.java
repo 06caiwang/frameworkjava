@@ -1,6 +1,11 @@
 package com.zyh.adminservice.map.service;
 
+import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminservice.map.domain.dto.CityDTO;
+import com.zyh.adminservice.map.domain.dto.SearchPoiDTO;
 import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
+import com.zyh.commondomain.domain.dto.BasePageDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +39,18 @@ public interface IMapService {
      * @return 城市列表
      */
     List<SysRegionDTO> getHotCityList();
+
+    /**
+     * 根据地点搜索
+     * @param placeSearchReqDTO 搜索条件
+     * @return 搜索结果
+     */
+    BasePageDTO<SearchPoiDTO> searchSuggestOnMap(PlaceSearchReqDTO placeSearchReqDTO);
+
+    /**
+     * 根据经纬度来定位城市
+     * @param locationReqDTO 经纬度信息
+     * @return 城市信息
+     */
+    CityDTO locateCityByLocation(LocationReqDTO locationReqDTO);
 }

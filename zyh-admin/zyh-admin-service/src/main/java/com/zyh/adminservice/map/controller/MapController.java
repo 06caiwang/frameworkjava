@@ -1,12 +1,22 @@
 package com.zyh.adminservice.map.controller;
 
+import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.feign.map.domain.vo.CityVO;
 import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
+import com.zyh.adminapi.feign.map.domain.vo.SearchPoiVO;
 import com.zyh.adminapi.feign.map.feigen.MapFeignClient;
+import com.zyh.adminservice.map.domain.dto.CityDTO;
+import com.zyh.adminservice.map.domain.dto.SearchPoiDTO;
 import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
 import com.zyh.adminservice.map.service.IMapService;
 import com.zyh.commoncore.utils.BeanCopyUtil;
+import com.zyh.commoncore.utils.JsonUtil;
 import com.zyh.commondomain.domain.R;
+import com.zyh.commondomain.domain.dto.BasePageDTO;
+import com.zyh.commondomain.domain.vo.BasePageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -100,6 +110,49 @@ public class MapController implements MapFeignClient {
 
         // 3. 转换VO
         List<RegionVO> response = BeanCopyUtil.copyListProperties(list, RegionVO::new);
+
+        // 4. 返回结果
+        return R.ok(response);
+    }
+
+
+    /**
+     * 根据地点搜索
+     * @param placeSearchReqDTO 搜索条件
+     * @return 搜索结果
+     */
+    @Override
+    public R<BasePageVO<SearchPoiVO>> searchSuggestOnMap(PlaceSearchReqDTO placeSearchReqDTO) {
+        // 1. 打印日志
+        log.info("searchSuggestOnMap: {}", JsonUtil.obj2String(placeSearchReqDTO));
+
+        // 2. service
+        BasePageDTO<SearchPoiDTO> list =  mapService.searchSuggestOnMap(placeSearchReqDTO);
+
+        // 3. 转换VO
+        BasePageVO<SearchPoiVO> response = new BasePageVO<>();
+        BeanUtils.copyProperties(list, response);
+
+        // 4. 返回结果
+        return R.ok(response);
+    }
+
+    /**
+     * 根据经纬度来定位城市
+     * @param locationReqDTO 经纬度信息
+     * @return 城市信息
+     */
+    @Override
+    public R<CityVO> locateCityByLocation(LocationReqDTO locationReqDTO) {
+        // 1. 打印日志
+        log.info("locateCityByLocation: {}", JsonUtil.obj2String(locationReqDTO));
+
+        // 2. service
+        CityDTO cityDTO =  mapService.locateCityByLocation(locationReqDTO);
+
+        // 3. 转换VO
+        CityVO response = new CityVO();
+        BeanUtils.copyProperties(cityDTO, response);
 
         // 4. 返回结果
         return R.ok(response);

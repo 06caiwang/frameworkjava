@@ -1,9 +1,16 @@
 package com.zyh.adminapi.feign.map.feigen;
 
+import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.feign.map.domain.vo.CityVO;
 import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
+import com.zyh.adminapi.feign.map.domain.vo.SearchPoiVO;
 import com.zyh.commondomain.domain.R;
+import com.zyh.commondomain.domain.vo.BasePageVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -45,4 +52,19 @@ public interface MapFeignClient {
     @GetMapping("/map/city_hot_list")
     R<List<RegionVO>> getHotCityList();
 
+    /**
+     * 根据地点搜索
+     * @param placeSearchReqDTO 搜索条件
+     * @return 搜索结果
+     */
+    @PostMapping("/map/search")
+    R<BasePageVO<SearchPoiVO>> searchSuggestOnMap(@RequestBody PlaceSearchReqDTO placeSearchReqDTO);
+
+    /**
+     * 根据经纬度来定位城市
+     * @param locationReqDTO 经纬度信息
+     * @return 城市信息
+     */
+    @PostMapping("/map/locate_city_by_location")
+    R<CityVO> locateCityByLocation(@RequestBody LocationReqDTO locationReqDTO);
 }

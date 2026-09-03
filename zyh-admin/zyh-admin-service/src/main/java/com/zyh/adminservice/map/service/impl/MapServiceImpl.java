@@ -3,12 +3,17 @@ package com.zyh.adminservice.map.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.zyh.adminapi.feign.map.constants.MapConstants;
-import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
-import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
+import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminservice.map.domain.dto.*;
 import com.zyh.adminservice.map.domain.entity.SysRegion;
 import com.zyh.adminservice.map.mapper.RegionMapper;
 import com.zyh.adminservice.map.service.IMapService;
+import com.zyh.adminservice.map.service.ITencentMapService;
 import com.zyh.commmoncache.utils.CacheUtil;
+
+import com.zyh.commoncore.utils.PageUtil;
+import com.zyh.commondomain.domain.dto.BasePageDTO;
 import com.zyh.commonredis.service.RedisService;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,10 +43,18 @@ public class MapServiceImpl implements IMapService {
     private RedisService redisService;
 
     /**
+     * 腾讯位置服务的服务类
+     */
+    @Autowired
+    private ITencentMapService tencentMapService;
+
+    /**
      * 本地缓存服务
      */
     @Autowired
     private Cache<String, Object> caffeineCache;
+    @Autowired
+    private ITencentMapService iTencentMapService;
 
     @PostConstruct
     public void initCityList() {
@@ -330,5 +343,77 @@ public class MapServiceImpl implements IMapService {
 
         // 5. 返回结果
         return list;
+    }
+
+    @Override
+    public BasePageDTO<SearchPoiDTO> searchSuggestOnMap(PlaceSearchReqDTO placeSearchReqDTO) {
+        // 1. 构建查询腾讯位置服务的入参
+        SuggestSearchDTO suggestSearchDTO = new SuggestSearchDTO();
+        BeanUtils.copyProperties(placeSearchReqDTO, suggestSearchDTO);
+        suggestSearchDTO.setPageIndex(placeSearchReqDTO.getPageNo());
+        suggestSearchDTO.setId(String.valueOf(placeSearchReqDTO.getId()));
+
+        // 2. 调用腾讯地图位置服务
+        PoiListDTO poiListDTO = tencentMapService.searchQQMapPlaceByRegion(suggestSearchDTO);
+
+        // 3. 转换DTO
+        List<PoiDTO> poiDTOList = poiListDTO.getData();
+        BasePageDTO<SearchPoiDTO> list = new BasePageDTO<>();
+        list.setTotals(poiListDTO.getCount());
+        list.setTotalPages(PageUtil.getTotalPages(list.getTotals(), placeSearchReqDTO.getPageSize()));
+
+        // 4. 返回结果
+        List<SearchPoiDTO> pageRes = new ArrayList<>();
+        for (PoiDTO poiDTO : poiDTOList) {
+            SearchPoiDTO searchPoiDTO = new SearchPoiDTO();
+            BeanUtils.copyProperties(poiDTO, searchPoiDTO);
+            searchPoiDTO.setLongitude(poiDTO.getLocation().getLng());
+            searchPoiDTO.setLatitude(poiDTO.getLocation().getLat());
+            pageRes.add(searchPoiDTO);
+        }
+        list.setList(pageRes);
+        return list;
+    }
+
+    /**
+     * 根据经纬度来定位城市
+     * @param locationReqDTO 经纬度信息
+     * @return 城市信息
+     */
+    @Override
+    public CityDTO locateCityByLocation(LocationReqDTO locationReqDTO) {
+        // 1. 构建查询腾讯地图的参数
+        LocationDTO locationDTO = new LocationDTO();
+        BeanUtils.copyProperties(locationReqDTO, locationDTO);
+
+        // 2. 调用腾讯地图服务
+        GeoResultDTO geoResultDTO = iTencentMapService.getQQMapDistrictByLonLat(locationDTO);
+
+        // 3. 非空判断 + 从缓存中找到该城市信息
+        CityDTO result = new CityDTO();
+
+        if (geoResultDTO != null && geoResultDTO.getResult().getAd_info() != null) {
+
+            String cityName = geoResultDTO.getResult().getAd_info().getCity();
+
+            // 查询缓存
+            List<SysRegionDTO> cache = CacheUtil.getL2Cache(
+                    redisService,
+                    MapConstants.CACHE_MAP_CITY_KEY,
+                    new TypeReference<List<SysRegionDTO>>() {},
+                    caffeineCache
+            );
+
+            assert cache != null;
+            for (SysRegionDTO sysRegionDTO : cache) {
+                if (sysRegionDTO.getFullName().equals(cityName)) {
+                    BeanUtils.copyProperties(sysRegionDTO, result);
+                    return result;
+                }
+            }
+        }
+
+        // 4. 返回结果 -> null
+        return result;
     }
 }

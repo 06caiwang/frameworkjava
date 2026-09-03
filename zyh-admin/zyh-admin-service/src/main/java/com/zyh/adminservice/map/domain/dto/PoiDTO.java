@@ -8,7 +8,7 @@ import lombok.Data;
  */
 
 @Data
-public class PioDTO {
+public class PoiDTO {
     /**
      * poi地点的唯一标识
      */
