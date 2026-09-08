@@ -1,4 +1,4 @@
-package com.zyh.commondomain.domain.dto;
+package com.zyh.commoncore.domain.dto;
 
 import lombok.Data;
 
