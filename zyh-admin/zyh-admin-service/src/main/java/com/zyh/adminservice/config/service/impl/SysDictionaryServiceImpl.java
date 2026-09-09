@@ -2,10 +2,13 @@ package com.zyh.adminservice.config.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
+import com.zyh.adminservice.config.domain.entity.SysDictionaryData;
 import com.zyh.adminservice.config.domain.entity.SysDictionaryType;
+import com.zyh.adminservice.config.mapper.SysDictionaryDataMapper;
 import com.zyh.adminservice.config.mapper.SysDictionaryTypeMapper;
 import com.zyh.adminservice.config.service.ISysDictionaryService;
 import com.zyh.commondomain.domain.vo.BasePageVO;
@@ -26,6 +29,9 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
     @Autowired
     private SysDictionaryTypeMapper sysDictionaryTypeMapper;
+
+    @Autowired
+    private SysDictionaryDataMapper sysDictionaryDataMapper;
 
     @Override
     public Long addType(DictionaryTypeWriteReqDTO dictionaryTypeWriteReqDTO) {
@@ -115,5 +121,45 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
         sysDictionaryTypeMapper.updateById(sysDictionaryType);
 
         return sysDictionaryType.getId();
+    }
+
+    @Override
+    public Long addData(DictionaryDataAddReqDTO dictionaryDataAddReqDTO) {
+        // 创建查询 SQL, 校验记录
+        // select * from db where type_key = ?;
+        LambdaQueryWrapper<SysDictionaryType> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDictionaryType::getTypeKey, dictionaryDataAddReqDTO.getTypeKey());
+        SysDictionaryType sysDictionaryType = sysDictionaryTypeMapper.selectOne(wrapper);
+        if (sysDictionaryType == null) {
+            throw new ServiceException("字典类型不存在");
+        }
+
+        // 构建查询 SQL
+        // select * from db where value = ? or date_key = ?;
+        LambdaQueryWrapper<SysDictionaryData> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(SysDictionaryData::getValue, dictionaryDataAddReqDTO.getValue())
+                .or()
+                .eq(SysDictionaryData::getDataKey, dictionaryDataAddReqDTO.getDataKey());
+        SysDictionaryData sysDictionaryData = sysDictionaryDataMapper.selectOne(wrapper1);
+
+        // 重复校验
+        if (sysDictionaryData != null) {
+            throw new ServiceException("字典数据键或值已存在");
+        }
+
+        // 新增字典数据的键值等
+        sysDictionaryData = new SysDictionaryData();
+        sysDictionaryData.setTypeKey(dictionaryDataAddReqDTO.getTypeKey());
+        sysDictionaryData.setDataKey(dictionaryDataAddReqDTO.getDataKey());
+        sysDictionaryData.setValue(dictionaryDataAddReqDTO.getValue());
+        if (dictionaryDataAddReqDTO.getSort() != null) {
+            sysDictionaryData.setSort(dictionaryDataAddReqDTO.getSort());
+        }
+        if (StringUtils.isNotBlank(dictionaryDataAddReqDTO.getRemark())) {
+            sysDictionaryData.setRemark(dictionaryDataAddReqDTO.getRemark());
+        }
+        sysDictionaryDataMapper.insert(sysDictionaryData);
+
+        return sysDictionaryData.getId();
     }
 }

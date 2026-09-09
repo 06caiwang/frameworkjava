@@ -1,5 +1,6 @@
 package com.zyh.adminservice.config.controller;
 
+import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
@@ -65,5 +66,15 @@ public class DictionaryController extends DictionaryFeignClient {
         log.info("listType DictionaryTypeListReqDTO: {}", JsonUtil.obj2String(dictionaryTypeWriteReqDTO));
         // 调用service，并返回结果
         return R.ok(iSysDictionaryService.editType(dictionaryTypeWriteReqDTO));
+    }
+
+    /**
+     * 新增字典数据
+     * @param dictionaryDataAddReqDTO 新增字典数据DTO
+     * @return Long
+     */
+    @PostMapping("/dictionary_data/add")
+    public R<Long> addData(@RequestBody @Validated DictionaryDataAddReqDTO dictionaryDataAddReqDTO) {
+        return R.ok(iSysDictionaryService.addData(dictionaryDataAddReqDTO));
     }
 }

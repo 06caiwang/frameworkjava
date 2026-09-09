@@ -1,5 +1,6 @@
 package com.zyh.adminservice.config.service;
 
+import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
@@ -30,5 +31,13 @@ public interface ISysDictionaryService {
      * @return Long
      */
     Long editType(DictionaryTypeWriteReqDTO dictionaryTypeWriteReqDTO);
+
+    /**
+     * 添加字典数据
+     * @param dictionaryDataAddReqDTO 添加字典数据DTO
+     * @return Long
+     */
+    Long addData(DictionaryDataAddReqDTO dictionaryDataAddReqDTO);
+
 
 }
