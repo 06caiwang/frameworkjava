@@ -54,4 +54,16 @@ public class DictionaryController extends DictionaryFeignClient {
         return R.ok(iSysDictionaryService.listType(dictionaryTypeListReqDTO));
     }
 
+    /**
+     * 编辑字典类型
+     * @param dictionaryTypeWriteReqDTO 编辑字典类型DTO
+     * @return Long
+     */
+    @PostMapping("/dictionary_type/edit")
+    public R<Long> editType(@RequestBody @Validated DictionaryTypeWriteReqDTO dictionaryTypeWriteReqDTO) {
+        // 打印日志
+        log.info("listType DictionaryTypeListReqDTO: {}", JsonUtil.obj2String(dictionaryTypeWriteReqDTO));
+        // 调用service，并返回结果
+        return R.ok(iSysDictionaryService.editType(dictionaryTypeWriteReqDTO));
+    }
 }

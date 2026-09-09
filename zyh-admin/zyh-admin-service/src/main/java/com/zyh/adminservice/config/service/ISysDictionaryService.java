@@ -23,4 +23,12 @@ public interface ISysDictionaryService {
      * @return BasePageVO
      */
     BasePageVO<DictionaryTypeVO> listType(DictionaryTypeListReqDTO dictionaryTypeListReqDTO);
+
+    /**
+     * 编辑字典类型
+     * @param dictionaryTypeWriteReqDTO 编辑字典类型DTO
+     * @return Long
+     */
+    Long editType(DictionaryTypeWriteReqDTO dictionaryTypeWriteReqDTO);
+
 }
