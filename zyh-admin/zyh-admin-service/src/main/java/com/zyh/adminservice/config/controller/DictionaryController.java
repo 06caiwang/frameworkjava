@@ -63,7 +63,7 @@ public class DictionaryController extends DictionaryFeignClient {
     @PostMapping("/dictionary_type/edit")
     public R<Long> editType(@RequestBody @Validated DictionaryTypeWriteReqDTO dictionaryTypeWriteReqDTO) {
         // 打印日志
-        log.info("listType DictionaryTypeListReqDTO: {}", JsonUtil.obj2String(dictionaryTypeWriteReqDTO));
+        log.info("editType DictionaryTypeWriteReqDTO: {}", JsonUtil.obj2String(dictionaryTypeWriteReqDTO));
         // 调用service，并返回结果
         return R.ok(iSysDictionaryService.editType(dictionaryTypeWriteReqDTO));
     }
@@ -75,6 +75,9 @@ public class DictionaryController extends DictionaryFeignClient {
      */
     @PostMapping("/dictionary_data/add")
     public R<Long> addData(@RequestBody @Validated DictionaryDataAddReqDTO dictionaryDataAddReqDTO) {
+        // 打印日志
+        log.info("addData DictionaryDataAddReqDTO: {}", JsonUtil.obj2String(dictionaryDataAddReqDTO));
+        // 调用service，并返回结果
         return R.ok(iSysDictionaryService.addData(dictionaryDataAddReqDTO));
     }
 }
