@@ -3,8 +3,10 @@ package com.zyh.adminservice.config.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
+import com.zyh.adminapi.config.domain.dto.DictionaryDataListReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
 import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
+import com.zyh.adminapi.config.domain.vo.DictionaryDataVO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.adminservice.config.domain.entity.SysDictionaryData;
 import com.zyh.adminservice.config.domain.entity.SysDictionaryType;
@@ -161,5 +163,37 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
         sysDictionaryDataMapper.insert(sysDictionaryData);
 
         return sysDictionaryData.getId();
+    }
+
+    @Override
+    public BasePageVO<DictionaryDataVO> listData(DictionaryDataListReqDTO dictionaryDataListReqDTO) {
+        // 空结果集
+        BasePageVO<DictionaryDataVO> result = new BasePageVO<>();
+        // 构造查询 SQL
+        // select * from db where type_key = ? (and value like '...%') order by sort asc, id asc;
+        LambdaQueryWrapper<SysDictionaryData> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysDictionaryData::getTypeKey, dictionaryDataListReqDTO.getTypeKey());
+        if (StringUtils.isNotBlank(dictionaryDataListReqDTO.getValue())) {
+            queryWrapper.likeRight(SysDictionaryData::getValue, dictionaryDataListReqDTO.getValue());
+        }
+        queryWrapper.orderByAsc(SysDictionaryData::getSort);
+        queryWrapper.orderByAsc(SysDictionaryData::getId);
+        // 分页查询
+        Page<SysDictionaryData> page = sysDictionaryDataMapper.selectPage(
+                new Page<>(dictionaryDataListReqDTO.getPageNo().longValue(), dictionaryDataListReqDTO.getPageSize().longValue()),
+                queryWrapper
+        );
+        // 构建查询结果
+        result.setTotals(((Long)page.getTotal()).intValue());
+        result.setTotalPages(((Long)page.getPages()).intValue());
+        List<DictionaryDataVO> list = new ArrayList<>();
+        for (SysDictionaryData sysDictionaryData : page.getRecords()) {
+            DictionaryDataVO dictionaryDataVO = new DictionaryDataVO();
+            BeanUtils.copyProperties(sysDictionaryData, dictionaryDataVO);
+            list.add(dictionaryDataVO);
+        }
+        result.setList(list);
+
+        return result;
     }
 }
