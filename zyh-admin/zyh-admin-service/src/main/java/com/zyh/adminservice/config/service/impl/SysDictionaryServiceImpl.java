@@ -1,5 +1,6 @@
 package com.zyh.adminservice.config.service.impl;
 
+import com.alibaba.nacos.shaded.com.google.common.collect.Maps;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zyh.adminapi.config.domain.dto.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyuheng
@@ -234,4 +236,36 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
         return result;
     }
+
+    @Override
+    public Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(List<String> typeKeys) {
+        // 先把所有的字典数据查询出来
+        List<SysDictionaryData> list = sysDictionaryDataMapper.selectList(
+                new LambdaQueryWrapper<SysDictionaryData>().in(SysDictionaryData::getTypeKey, typeKeys));
+        List<DictionaryDataDTO> result = new ArrayList<>();
+        for (SysDictionaryData sysDictionaryData : list) {
+            DictionaryDataDTO dictionaryDataDTO = new DictionaryDataDTO();
+            BeanUtils.copyProperties(sysDictionaryData, dictionaryDataDTO);
+            result.add(dictionaryDataDTO);
+        }
+        // 把查询出来的结果封装成哈希映射的形式
+        Map<String, List<DictionaryDataDTO>> map = Maps.newHashMap();
+        for (DictionaryDataDTO dictionaryDataDTO : result) {
+            List<DictionaryDataDTO> value;
+            // 先判断当前字典类型业务主键是否在哈希中
+            if (map.get(dictionaryDataDTO.getTypeKey()) == null) {
+                value = new ArrayList<>();
+                value.add(dictionaryDataDTO);
+                map.put(dictionaryDataDTO.getTypeKey(), value);
+            } else {
+                // 当前字典类型业务主键已经在哈希中
+                value = map.get(dictionaryDataDTO.getTypeKey());
+                value.add(dictionaryDataDTO);
+            }
+        }
+
+        return map;
+    }
+
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyuheng
@@ -114,5 +115,13 @@ public class DictionaryController implements DictionaryFeignClient {
         log.info("selectDictDataByType typeKey: {}", typeKey);
         // 调用service，并返回结果
         return iSysDictionaryService.selectDictDataByType(typeKey);
+    }
+
+    @Override
+    public Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(List<String> typeKeys) {
+        // 打印日志
+        log.info("selectDictDataByTypes typeKeys: {}", JsonUtil.obj2String(typeKeys));
+        // 调用service，并返回结果
+        return iSysDictionaryService.selectDictDataByTypes(typeKeys);
     }
 }

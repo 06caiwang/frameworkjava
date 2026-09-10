@@ -3,9 +3,12 @@ package com.zyh.adminapi.config.feign;
 import com.zyh.adminapi.config.domain.dto.DictionaryDataDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyuheng
@@ -20,6 +23,14 @@ public interface DictionaryFeignClient {
      */
     @GetMapping("/dictionary_data/type")
     List<DictionaryDataDTO> selectDictDataByType(@RequestParam String typeKey);
+
+    /**
+     * 获取多个字典类型下的所有字典数据
+     * @param typeKeys 字典类型键列表
+     * @return 哈希  字典类型键->字典数据列表
+     */
+    @PostMapping("/dictionary_data/types")
+    Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(@RequestBody List<String> typeKeys);
 
 
 }

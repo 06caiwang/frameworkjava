@@ -6,6 +6,7 @@ import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.commondomain.domain.vo.BasePageVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyuheng
@@ -60,4 +61,11 @@ public interface ISysDictionaryService {
      * @return 字典数据列表
      */
     List<DictionaryDataDTO> selectDictDataByType(String typeKey);
+
+    /**
+     * 获取多个字典类型下的所有字典数据
+     * @param typeKeys 字典类型键列表
+     * @return 哈希  字典类型键->字典数据列表
+     */
+    Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(List<String> typeKeys);
 }
