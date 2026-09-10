@@ -68,4 +68,18 @@ public interface ISysDictionaryService {
      * @return 哈希  字典类型键->字典数据列表
      */
     Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(List<String> typeKeys);
+
+    /**
+     * 根据字典数据业务主键获取字典数据对象
+     * @param dataKey 字典数据业务主键
+     * @return DictionaryDataDTO
+     */
+    DictionaryDataDTO getDicDataByKey(String dataKey);
+
+    /**
+     * 根据多个字典数据业务主键获取多个字典数据对象
+     * @param dataKeys 多个字典数据业务主键
+     * @return List<DictionaryDataDTO>
+     */
+    List<DictionaryDataDTO> getDicDataByKeys(List<String> dataKeys);
 }

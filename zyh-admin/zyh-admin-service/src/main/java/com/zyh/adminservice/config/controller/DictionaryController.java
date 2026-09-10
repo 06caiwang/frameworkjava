@@ -124,4 +124,20 @@ public class DictionaryController implements DictionaryFeignClient {
         // 调用service，并返回结果
         return iSysDictionaryService.selectDictDataByTypes(typeKeys);
     }
+
+    @Override
+    public DictionaryDataDTO getDicDataByKey(String dataKey) {
+        // 打印日志
+        log.info("getDicDataByKey dataKey: {}", dataKey);
+        // 调用service，并返回结果
+        return iSysDictionaryService.getDicDataByKey(dataKey);
+    }
+
+    @Override
+    public List<DictionaryDataDTO> getDicDataByKeys(List<String> dataKeys) {
+        // 打印日志
+        log.info("getDicDataByKeys dataKeys: {}", JsonUtil.obj2String(dataKeys));
+        // 调用service，并返回结果
+        return iSysDictionaryService.getDicDataByKeys(dataKeys);
+    }
 }

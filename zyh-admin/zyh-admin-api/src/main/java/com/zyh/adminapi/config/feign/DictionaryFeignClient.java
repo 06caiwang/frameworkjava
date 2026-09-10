@@ -32,5 +32,19 @@ public interface DictionaryFeignClient {
     @PostMapping("/dictionary_data/types")
     Map<String, List<DictionaryDataDTO>> selectDictDataByTypes(@RequestBody List<String> typeKeys);
 
+    /**
+     * 根据字典数据业务主键获取字典数据对象
+     * @param dataKey 字典数据业务主键
+     * @return DictionaryDataDTO
+     */
+    @GetMapping("/dictionary_data/key")
+    DictionaryDataDTO getDicDataByKey(@RequestParam String dataKey);
 
+    /**
+     * 根据多个字典数据业务主键获取多个字典数据对象
+     * @param dataKeys 多个字典数据业务主键
+     * @return List<DictionaryDataDTO>
+     */
+    @PostMapping("/dictionary_data/keys")
+    List<DictionaryDataDTO> getDicDataByKeys(@RequestBody List<String> dataKeys);
 }
