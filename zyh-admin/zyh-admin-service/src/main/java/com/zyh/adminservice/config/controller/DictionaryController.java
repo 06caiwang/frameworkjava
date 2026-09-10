@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author zhangyuheng
  */
 @Slf4j
 @RestController
-public class DictionaryController extends DictionaryFeignClient {
+public class DictionaryController implements DictionaryFeignClient {
 
     @Resource(name = "sysDictionaryServiceImpl")
     private ISysDictionaryService iSysDictionaryService;
@@ -104,5 +106,13 @@ public class DictionaryController extends DictionaryFeignClient {
         log.info("editData DictionaryDataEditReqDTO: {}", JsonUtil.obj2String(dictionaryDataEditReqDTO));
         // 调用service，并返回结果
         return R.ok(iSysDictionaryService.editData(dictionaryDataEditReqDTO));
+    }
+
+    @Override
+    public List<DictionaryDataDTO> selectDictDataByType(String typeKey) {
+        // 打印日志
+        log.info("selectDictDataByType typeKey: {}", typeKey);
+        // 调用service，并返回结果
+        return iSysDictionaryService.selectDictDataByType(typeKey);
     }
 }

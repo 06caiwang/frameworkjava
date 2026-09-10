@@ -219,4 +219,19 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
 
         return sysDictionaryData.getId();
     }
+
+    @Override
+    public List<DictionaryDataDTO> selectDictDataByType(String typeKey) {
+        // 先查询数据表实体类
+        List<SysDictionaryData> list = sysDictionaryDataMapper.selectList(new LambdaQueryWrapper<SysDictionaryData>().eq(SysDictionaryData::getTypeKey, typeKey));
+        // 需要把数据表实体类对象转换成出参实体类对象
+        List<DictionaryDataDTO> result = new ArrayList<>();
+        for (SysDictionaryData sysDictionaryData : list) {
+            DictionaryDataDTO dictionaryDataDTO = new DictionaryDataDTO();
+            BeanUtils.copyProperties(sysDictionaryData, dictionaryDataDTO);
+            result.add(dictionaryDataDTO);
+        }
+
+        return result;
+    }
 }

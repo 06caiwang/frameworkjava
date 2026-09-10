@@ -5,6 +5,8 @@ import com.zyh.adminapi.config.domain.vo.DictionaryDataVO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.commondomain.domain.vo.BasePageVO;
 
+import java.util.List;
+
 /**
  * @author zhangyuheng
  */
@@ -51,4 +53,11 @@ public interface ISysDictionaryService {
      * @return Long
      */
     Long editData(DictionaryDataEditReqDTO dictionaryDataEditReqDTO);
+
+    /**
+     * 获取某个字典类型下的所有字典数据
+     * @param typeKey 字典类型键
+     * @return 字典数据列表
+     */
+    List<DictionaryDataDTO> selectDictDataByType(String typeKey);
 }
