@@ -2,10 +2,7 @@ package com.zyh.adminservice.config.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryDataListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
+import com.zyh.adminapi.config.domain.dto.*;
 import com.zyh.adminapi.config.domain.vo.DictionaryDataVO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.adminservice.config.domain.entity.SysDictionaryData;
@@ -195,5 +192,31 @@ public class SysDictionaryServiceImpl implements ISysDictionaryService {
         result.setList(list);
 
         return result;
+    }
+
+    @Override
+    public Long editData(DictionaryDataEditReqDTO dictionaryDataEditReqDTO) {
+        // 构造查询SQL
+        LambdaQueryWrapper<SysDictionaryData> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDictionaryData::getDataKey, dictionaryDataEditReqDTO.getDataKey());
+        SysDictionaryData sysDictionaryData = sysDictionaryDataMapper.selectOne(wrapper);
+        // 校验
+        if (sysDictionaryData == null) {
+            throw new ServiceException("字典数据不存在");
+        }
+        if (sysDictionaryDataMapper.selectOne(new LambdaQueryWrapper<SysDictionaryData>().ne(SysDictionaryData::getDataKey, dictionaryDataEditReqDTO.getDataKey()).eq(SysDictionaryData::getValue, dictionaryDataEditReqDTO.getValue())) != null) {
+            throw new ServiceException("字典数据名称已存在");
+        }
+        // 部分属性选择性的修改
+        sysDictionaryData.setValue(dictionaryDataEditReqDTO.getValue());
+        if (dictionaryDataEditReqDTO.getSort() != null) {
+            sysDictionaryData.setSort(dictionaryDataEditReqDTO.getSort());
+        }
+        if (StringUtils.isNotBlank(dictionaryDataEditReqDTO.getRemark())) {
+            sysDictionaryData.setRemark(dictionaryDataEditReqDTO.getRemark());
+        }
+        sysDictionaryDataMapper.updateById(sysDictionaryData);
+
+        return sysDictionaryData.getId();
     }
 }

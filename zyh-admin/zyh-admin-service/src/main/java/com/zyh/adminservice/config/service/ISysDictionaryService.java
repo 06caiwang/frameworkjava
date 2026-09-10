@@ -1,9 +1,6 @@
 package com.zyh.adminservice.config.service;
 
-import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryDataListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
+import com.zyh.adminapi.config.domain.dto.*;
 import com.zyh.adminapi.config.domain.vo.DictionaryDataVO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.commondomain.domain.vo.BasePageVO;
@@ -47,4 +44,11 @@ public interface ISysDictionaryService {
      * @return BasePageVO
      */
     BasePageVO<DictionaryDataVO> listData(DictionaryDataListReqDTO dictionaryDataListReqDTO);
+
+    /**
+     * 编辑字典数据
+     * @param dictionaryDataEditReqDTO 编辑字典数据DTO
+     * @return Long
+     */
+    Long editData(DictionaryDataEditReqDTO dictionaryDataEditReqDTO);
 }

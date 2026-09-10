@@ -1,9 +1,6 @@
 package com.zyh.adminservice.config.controller;
 
-import com.zyh.adminapi.config.domain.dto.DictionaryDataAddReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryDataListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeListReqDTO;
-import com.zyh.adminapi.config.domain.dto.DictionaryTypeWriteReqDTO;
+import com.zyh.adminapi.config.domain.dto.*;
 import com.zyh.adminapi.config.domain.vo.DictionaryDataVO;
 import com.zyh.adminapi.config.domain.vo.DictionaryTypeVO;
 import com.zyh.adminapi.config.feign.DictionaryFeignClient;
@@ -96,4 +93,16 @@ public class DictionaryController extends DictionaryFeignClient {
         return R.ok(iSysDictionaryService.listData(dictionaryDataListReqDTO));
     }
 
+    /**
+     * 编辑字典数据
+     * @param dictionaryDataEditReqDTO 编辑字典数据DTO
+     * @return Long
+     */
+    @PostMapping("/dictionary_data/edit")
+    public R<Long> editData(@RequestBody @Validated DictionaryDataEditReqDTO dictionaryDataEditReqDTO) {
+        // 打印日志
+        log.info("editData DictionaryDataEditReqDTO: {}", JsonUtil.obj2String(dictionaryDataEditReqDTO));
+        // 调用service，并返回结果
+        return R.ok(iSysDictionaryService.editData(dictionaryDataEditReqDTO));
+    }
 }
