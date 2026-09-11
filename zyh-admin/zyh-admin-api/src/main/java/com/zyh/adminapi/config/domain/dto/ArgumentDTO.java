@@ -1,16 +1,17 @@
 package com.zyh.adminapi.config.domain.dto;
 
-import com.zyh.commoncore.domain.dto.BasePageDTO;
-import com.zyh.commondomain.domain.dto.BasePageReqDTO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @author zhangyuheng
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class ArgumentListReqDTO extends BasePageReqDTO {
+public class ArgumentDTO {
+    /**
+     * 自增主键
+     */
+    private Long id;
+
     /**
      * 参数名称
      */
@@ -20,4 +21,14 @@ public class ArgumentListReqDTO extends BasePageReqDTO {
      * 参数业务主键
      */
     private String configKey;
+
+    /**
+     * 参数值
+     */
+    private String value;
+
+    /**
+     * 备注
+     */
+    private String remark;
 }
