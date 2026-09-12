@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -26,6 +27,7 @@ import java.time.format.DateTimeFormatter;
  * @author zhangyuheng
  */
 @Configuration
+@ConditionalOnProperty(name = "zyh.redis.enabled", havingValue = "true")
 public class RedisConfig {
     /**
      * redis序列化
@@ -36,7 +38,7 @@ public class RedisConfig {
     //修饰符  返回值类型 函数名  参数列表  函数体
     //key  value
     //key  value (hashKey  hashValue)
-    @Bean
+    @Bean(name = "zyhRedisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
