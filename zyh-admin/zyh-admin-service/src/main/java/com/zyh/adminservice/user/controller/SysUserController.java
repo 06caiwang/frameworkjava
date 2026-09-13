@@ -3,6 +3,7 @@ package com.zyh.adminservice.user.controller;
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserListReqDTO;
+import com.zyh.adminservice.user.domain.vo.SysUserLoginVO;
 import com.zyh.adminservice.user.domain.vo.SysUserVO;
 import com.zyh.adminservice.user.service.ISysUserService;
 import com.zyh.commoncore.utils.JsonUtil;
@@ -13,10 +14,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,4 +74,14 @@ public class SysUserController {
                 .collect(Collectors.toList())
         );
     }
+
+    /**
+     * 获取B端登录用户信息
+     * @return B端用户信息VO
+     */
+    @GetMapping("/login_info/get")
+    public R<SysUserLoginVO> getLoginUser() {
+        return R.ok(sysUserService.getLoginUser().convertToVO());
+    }
+
 }

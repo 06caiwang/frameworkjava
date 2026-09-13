@@ -3,6 +3,7 @@ package com.zyh.adminservice.user.service;
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserListReqDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserLoginDTO;
 import com.zyh.commonsecurity.domain.dto.TokenDTO;
 
 import java.util.List;
@@ -32,4 +33,10 @@ public interface ISysUserService {
      * @return B用户列表
      */
     List<SysUserDTO> getUserList(SysUserListReqDTO sysUserListReqDTO);
+
+    /**
+     * 获取B端登录用户信息
+     * @return B端用户信息DTO
+     */
+    SysUserLoginDTO getLoginUser();
 }

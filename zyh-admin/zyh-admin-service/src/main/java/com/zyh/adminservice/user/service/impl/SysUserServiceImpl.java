@@ -5,6 +5,7 @@ import com.zyh.adminservice.config.service.ISysDictionaryService;
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserListReqDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserLoginDTO;
 import com.zyh.adminservice.user.domain.entity.SysUser;
 import com.zyh.adminservice.user.mapper.SysUserMapper;
 import com.zyh.adminservice.user.service.ISysUserService;
@@ -16,6 +17,7 @@ import com.zyh.commonsecurity.domain.dto.LoginUserDTO;
 import com.zyh.commonsecurity.domain.dto.TokenDTO;
 import com.zyh.commonsecurity.service.TokenService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -173,5 +175,29 @@ public class SysUserServiceImpl implements ISysUserService {
                     sysUserDTO.setRemark(sysUser.getRemark());
                     return sysUserDTO;
                 }).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取B端登录用户信息
+     * @return B端用户信息DTO
+     */
+    @Override
+    public SysUserLoginDTO getLoginUser() {
+        // 1 获取当前登录用户
+        LoginUserDTO loginUserDTO = tokenService.getLoginUser();
+        // 2 对象判断
+        if (loginUserDTO == null || loginUserDTO.getUserId() == null) {
+            throw new ServiceException("用户令牌有误", ResultCode.INVALID_PARA.getCode());
+        }
+        // 3 查询mysql
+        SysUser sysUser = sysUserMapper.selectById(loginUserDTO.getUserId());
+        if (sysUser == null) {
+            throw new ServiceException("用户不存在", ResultCode.INVALID_PARA.getCode());
+        }
+        // 4 封装结果
+        SysUserLoginDTO sysUserLoginDTO = new SysUserLoginDTO();
+        BeanUtils.copyProperties(loginUserDTO, sysUserLoginDTO);
+        BeanUtils.copyProperties(sysUser, sysUserLoginDTO);
+        return sysUserLoginDTO;
     }
 }
