@@ -7,19 +7,17 @@ import lombok.EqualsAndHashCode;
 
 /**
  * @author zhangyuheng
- * 字典类型列表DTO
  */
-
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DictionaryTypeListReqDTO extends BasePageReqDTO {
+public class ArgumentListReqDTO extends BasePageReqDTO {
     /**
-     * 字典类型值
+     * 参数名称
      */
-    private String value;
+    private String name;
 
     /**
-     * 字典类型键
+     * 参数业务主键
      */
-    private String typeKey;
+    private String configKey;
 }
