@@ -2,6 +2,8 @@ package com.zyh.adminservice.user.controller;
 
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserListReqDTO;
+import com.zyh.adminservice.user.domain.vo.SysUserVO;
 import com.zyh.adminservice.user.service.ISysUserService;
 import com.zyh.commoncore.utils.JsonUtil;
 import com.zyh.commondomain.domain.R;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangyuheng
@@ -56,5 +61,19 @@ public class SysUserController {
 
         // 调用service,返回结果
         return R.ok(sysUserService.addOrEdit(sysUserDTO));
+    }
+
+    /**
+     * 查询B端用户
+     * @param sysUserListReqDTO 用户查询DTO
+     * @return B用户列表
+     */
+    @PostMapping("/list")
+    public R<List<SysUserVO>> getUserList(@RequestBody SysUserListReqDTO sysUserListReqDTO) {
+        List<SysUserDTO> sysUserDTOS = sysUserService.getUserList(sysUserListReqDTO);
+        return R.ok(sysUserDTOS.stream()
+                .map(SysUserDTO::convertToVO)
+                .collect(Collectors.toList())
+        );
     }
 }

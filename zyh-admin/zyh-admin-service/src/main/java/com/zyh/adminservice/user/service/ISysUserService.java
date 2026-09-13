@@ -2,7 +2,10 @@ package com.zyh.adminservice.user.service;
 
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserListReqDTO;
 import com.zyh.commonsecurity.domain.dto.TokenDTO;
+
+import java.util.List;
 
 /**
  * @author zhangyuheng
@@ -23,4 +26,10 @@ public interface ISysUserService {
      */
     Long addOrEdit(SysUserDTO sysUserDTO);
 
+    /**
+     * 查询B端用户
+     * @param sysUserListReqDTO 用户查询DTO
+     * @return B用户列表
+     */
+    List<SysUserDTO> getUserList(SysUserListReqDTO sysUserListReqDTO);
 }

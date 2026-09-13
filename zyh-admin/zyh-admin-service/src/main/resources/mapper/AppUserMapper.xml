@@ -9,4 +9,19 @@
         select * from sys_user where phone_number = #{phoneNumber}
     </select>
 
+    <select id="selectList" parameterType="com.zyh.adminservice.user.domain.entity.SysUser"
+            resultType="com.zyh.adminservice.user.domain.entity.SysUser">
+        select *from sys_user
+        <where>
+            <if test="id !=null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="phoneNumber !=null and phoneNumber != ''">
+                AND phone_number = #{phoneNumber}
+            </if>
+            <if test="status !=null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>
