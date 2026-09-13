@@ -2,6 +2,7 @@ package com.zyh.adminservice.user.service.impl;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.domain.entity.SysUser;
 import com.zyh.adminservice.user.mapper.SysUserMapper;
 import com.zyh.adminservice.user.service.ISysUserService;
@@ -21,11 +22,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserServiceImpl implements ISysUserService {
+
+    /**
+     * B端用户表的mapper
+     */
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    /**
+     * token服务类
+     */
     @Autowired
     private TokenService tokenService;
+
+    /**
+     * 字典服务引用
+     */
+    @Autowired
+    private ISysDictionaryService sysDictionaryService;
 
     @Override
     public TokenDTO login(PasswordLoginDTO passwordLoginDTO) {
@@ -70,9 +84,55 @@ public class SysUserServiceImpl implements ISysUserService {
         return tokenService.createToken(loginUserDTO);
     }
 
-    public static void main(String[] args) {
-        String enPsw = AESUtil.encryptHex("123456");
-        String psw = AESUtil.decryptHex(enPsw);
-        System.out.println(enPsw + "\n" + psw);
+    @Override
+    public Long addOrEdit(SysUserDTO sysUserDTO) {
+        // 创建一个空的SysUser对象
+        SysUser sysUser = new SysUser();
+
+        // 先处理新增的逻辑
+        if (sysUserDTO.getUserId() == null) {
+            // 先校验手机号
+            if (!VerifyUtil.checkPhone(sysUserDTO.getPhoneNumber())) {
+                throw new ServiceException("手机格式错误", ResultCode.INVALID_PARA.getCode());
+            }
+            // 校验密码
+            if (StringUtils.isEmpty(sysUserDTO.getPassword()) || !sysUserDTO.checkPassword()) {
+                throw new ServiceException("密码校验失败", ResultCode.INVALID_PARA.getCode());
+            }
+            // 手机号唯一性判断
+            SysUser existSysUser = sysUserMapper.selectByPhoneNumber(AESUtil.encryptHex(sysUserDTO.getPhoneNumber()));
+            if (existSysUser != null) {
+                throw new ServiceException("手机号已经被占用", ResultCode.INVALID_PARA.getCode());
+            }
+            // 判断身份信息
+            if (StringUtils.isEmpty(sysUserDTO.getIdentity()) || sysDictionaryService.getDicDataByKey(sysUserDTO.getIdentity()) == null) {
+                throw new ServiceException("用户身份错误", ResultCode.INVALID_PARA.getCode());
+            }
+            // 判断完成后，执行新增用户逻辑
+            sysUser.setPhoneNumber(
+                    AESUtil.encryptHex(sysUserDTO.getPhoneNumber())
+            );
+            sysUser.setPassword(
+                    DigestUtil.sha256Hex(sysUserDTO.getPassword())
+            );
+            sysUser.setIdentity(sysUserDTO.getIdentity());
+        }
+        sysUser.setId(sysUserDTO.getUserId());
+        sysUser.setNickName(sysUserDTO.getNickName());
+
+        // 判断用户状态
+        if (sysDictionaryService.getDicDataByKey(sysUserDTO.getStatus()) == null) {
+            throw new ServiceException("用户状态错误", ResultCode.INVALID_PARA.getCode());
+        }
+        sysUser.setStatus(sysUserDTO.getStatus());
+        sysUser.setRemark(sysUserDTO.getRemark());
+        sysUserMapper.insertOrUpdate(sysUser);
+
+        // 踢人
+        if (sysUserDTO.getUserId() != null && sysUserDTO.getStatus().equals("disable")) {
+            tokenService.delLoginUser(sysUserDTO.getUserId(), "sys");
+        }
+
+        return sysUser.getId();
     }
 }

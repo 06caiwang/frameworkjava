@@ -1,6 +1,7 @@
 package com.zyh.adminservice.user.controller;
 
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
+import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.service.ISysUserService;
 import com.zyh.commoncore.utils.JsonUtil;
 import com.zyh.commondomain.domain.R;
@@ -41,5 +42,15 @@ public class SysUserController {
 
         // 返回结果
         return R.ok(tokenDTO.convertToVo());
+    }
+
+    /**
+     * 新增或编辑用户
+     * @param sysUserDTO B端用户信息
+     * @return  用户ID
+     */
+    @PostMapping("/add_edit")
+    public R<Long> addOrEditUser(@RequestBody SysUserDTO sysUserDTO) {
+        return R.ok(sysUserService.addOrEdit(sysUserDTO));
     }
 }
