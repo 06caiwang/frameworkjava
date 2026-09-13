@@ -2,12 +2,14 @@ package com.zyh.commonsecurity.domain.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author zhangyuheng
  * 用户信息上下文
  */
 @Data
-public class LoginUserDTO {
+public class LoginUserDTO implements Serializable {
     /**
      * 用户标识
      */
