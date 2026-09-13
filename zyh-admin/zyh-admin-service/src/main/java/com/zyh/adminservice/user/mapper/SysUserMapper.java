@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * @author zhangyuheng
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUserMapper> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
     /**
      * B端用户登录
      *

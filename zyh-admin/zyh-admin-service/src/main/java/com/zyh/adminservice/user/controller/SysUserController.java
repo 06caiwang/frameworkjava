@@ -51,6 +51,10 @@ public class SysUserController {
      */
     @PostMapping("/add_edit")
     public R<Long> addOrEditUser(@RequestBody SysUserDTO sysUserDTO) {
+        // 打印日志
+        log.info("addOrEditUser SysUserDTO: {}", JsonUtil.obj2String(sysUserDTO));
+
+        // 调用service,返回结果
         return R.ok(sysUserService.addOrEdit(sysUserDTO));
     }
 }

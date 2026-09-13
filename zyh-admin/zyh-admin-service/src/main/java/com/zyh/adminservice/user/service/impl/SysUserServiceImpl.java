@@ -1,6 +1,7 @@
 package com.zyh.adminservice.user.service.impl;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import com.zyh.adminservice.config.service.ISysDictionaryService;
 import com.zyh.adminservice.user.domain.dto.PasswordLoginDTO;
 import com.zyh.adminservice.user.domain.dto.SysUserDTO;
 import com.zyh.adminservice.user.domain.entity.SysUser;
