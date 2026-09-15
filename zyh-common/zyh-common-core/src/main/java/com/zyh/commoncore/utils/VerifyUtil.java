@@ -15,6 +15,15 @@ public class VerifyUtil {
     public static final Pattern PHONE_PATTERN = Pattern.compile("^1[2|3|4|5|6|7|8|9][0-9]\\d{8}$");
 
     /**
+     * 邮箱的正则校验
+     */
+    public static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9_%+-]+(?:\\.[A-Za-z0-9_%+-]+)*@"
+                    + "(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+"
+                    + "[A-Za-z]{2,}$"
+    );
+
+    /**
      * 验证码的取值范围
      */
     public static final String NUMBER_VERIFY_CODES = "1234567890";
@@ -28,6 +37,22 @@ public class VerifyUtil {
     public static boolean checkPhone(String phone) {
         Matcher m = PHONE_PATTERN.matcher(phone);
         return m.matches();
+    }
+
+    /**
+     * 邮箱校验
+     *
+     * @param email 邮箱地址
+     * @return 格式正确返回 true，否则返回 false
+     */
+    public static boolean checkEmail(String email) {
+        if (email == null || email.length() > 254) {
+            return false;
+        }
+        int atIndex = email.indexOf('@');
+        return atIndex > 0
+                && atIndex <= 64
+                && EMAIL_PATTERN.matcher(email).matches();
     }
 
     /**

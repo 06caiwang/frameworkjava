@@ -116,9 +116,9 @@ public enum ResultCode {
     FAILED                      (500001, "操作失败"),
 
     /**
-     * 短信发送失败
+     * 邮件发送失败
      */
-    SEND_MSG_FAILED                        (500002, "短信发送失败"),
+    MAIL_MSG_FAILED                        (500002, "邮件发送失败"),
 
 
     /**

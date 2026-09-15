@@ -9,16 +9,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zyh-common</artifactId>
+    <artifactId>zyh-portal</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>zyh-common-core</module>
-        <module>zyh-common-domain</module>
-        <module>zyh-common-security</module>
-        <module>zyh-common-redis</module>
-        <module>zyh-common-cache</module>
-        <module>zyh-common-rabbitmq</module>
-        <module>zyh-common-message</module>
+        <module>zyh-portal-api</module>
+        <module>zyh-portal-service</module>
     </modules>
 
     <properties>
