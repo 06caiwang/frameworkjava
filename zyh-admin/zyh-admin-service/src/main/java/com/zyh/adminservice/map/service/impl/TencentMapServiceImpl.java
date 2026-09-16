@@ -1,6 +1,6 @@
 package com.zyh.adminservice.map.service.impl;
 
-import com.zyh.adminapi.feign.map.constants.MapConstants;
+import com.zyh.adminapi.map.constants.MapConstants;
 import com.zyh.adminservice.map.domain.dto.GeoResultDTO;
 import com.zyh.adminservice.map.domain.dto.LocationDTO;
 import com.zyh.adminservice.map.domain.dto.PoiListDTO;

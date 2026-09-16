@@ -44,7 +44,7 @@ public class CacheUtil {
     //修饰符  返回值类型 函数名  参数列表  函数体
     //存储到一级缓存的方法
     public static <T> void setL2Cache(String key, T value, Cache<String, Object> caffeineCache) {
-        caffeineCache.put(key, value);    //todo:本地缓存中存储的数据也需要设置有效时间
+        caffeineCache.put(key, value);
     }
 
 
@@ -63,6 +63,6 @@ public class CacheUtil {
     public static <T> void setL2Cache(RedisService redisService, String key, T value,
                                       Cache<String, Object> caffeineCache, Long timeout, TimeUnit timeUnit) {
         redisService.setCacheObject(key, value, timeout, timeUnit);
-        caffeineCache.put(key, value);   //todo:本地缓存中存储的数据也需要设置有效时间
+        caffeineCache.put(key, value);
     }
 }

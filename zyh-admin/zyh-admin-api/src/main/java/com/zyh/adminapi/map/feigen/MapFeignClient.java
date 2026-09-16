@@ -1,10 +1,10 @@
-package com.zyh.adminapi.feign.map.feigen;
+package com.zyh.adminapi.map.feigen;
 
-import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
-import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
-import com.zyh.adminapi.feign.map.domain.vo.CityVO;
-import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
-import com.zyh.adminapi.feign.map.domain.vo.SearchPoiVO;
+import com.zyh.adminapi.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.domain.vo.CityVO;
+import com.zyh.adminapi.map.domain.vo.RegionVO;
+import com.zyh.adminapi.map.domain.vo.SearchPoiVO;
 import com.zyh.commondomain.domain.R;
 import com.zyh.commondomain.domain.vo.BasePageVO;
 import org.springframework.cloud.openfeign.FeignClient;

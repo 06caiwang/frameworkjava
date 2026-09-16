@@ -1,4 +1,4 @@
-package com.zyh.adminapi.feign.map.constants;
+package com.zyh.adminapi.map.constants;
 
 /**
  * @author zhangyuheng
@@ -44,4 +44,9 @@ public class MapConstants {
      * 根据经纬度来获取区域信息的接口路由
      */
     public final static String QQMAP_GEOCODER = "/ws/geocoder/v1";
+
+    /**
+     * 热门城市键
+     */
+    public final static String CONFIG_KEY = "sys_hot_city";
 }

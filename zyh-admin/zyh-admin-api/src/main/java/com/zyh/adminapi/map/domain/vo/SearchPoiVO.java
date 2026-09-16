@@ -1,4 +1,4 @@
-package com.zyh.adminapi.feign.map.domain.vo;
+package com.zyh.adminapi.map.domain.vo;
 
 import lombok.Data;
 

@@ -1,20 +1,21 @@
 package com.zyh.adminservice.map.controller;
 
-import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
-import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
-import com.zyh.adminapi.feign.map.domain.vo.CityVO;
-import com.zyh.adminapi.feign.map.domain.vo.RegionVO;
-import com.zyh.adminapi.feign.map.domain.vo.SearchPoiVO;
-import com.zyh.adminapi.feign.map.feigen.MapFeignClient;
+import com.zyh.adminapi.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.domain.dto.SysRegionDTO;
+import com.zyh.adminapi.map.domain.vo.CityVO;
+import com.zyh.adminapi.map.domain.vo.RegionVO;
+import com.zyh.adminapi.map.domain.vo.SearchPoiVO;
+import com.zyh.adminapi.map.feigen.MapFeignClient;
 import com.zyh.adminservice.map.domain.dto.CityDTO;
 import com.zyh.adminservice.map.domain.dto.SearchPoiDTO;
-import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
 import com.zyh.adminservice.map.service.IMapService;
 import com.zyh.commoncore.utils.BeanCopyUtil;
 import com.zyh.commoncore.utils.JsonUtil;
 import com.zyh.commondomain.domain.R;
 import com.zyh.commondomain.domain.dto.BasePageDTO;
 import com.zyh.commondomain.domain.vo.BasePageVO;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ import java.util.Map;
 @Slf4j
 public class MapController implements MapFeignClient {
 
-    @Autowired
+    @Resource(name = "mapServiceImpl")
     private IMapService mapService;
 
     /**

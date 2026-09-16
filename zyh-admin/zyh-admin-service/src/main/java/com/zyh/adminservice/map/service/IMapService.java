@@ -1,10 +1,10 @@
 package com.zyh.adminservice.map.service;
 
-import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
-import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.domain.dto.SysRegionDTO;
 import com.zyh.adminservice.map.domain.dto.CityDTO;
 import com.zyh.adminservice.map.domain.dto.SearchPoiDTO;
-import com.zyh.adminservice.map.domain.dto.SysRegionDTO;
 import com.zyh.commondomain.domain.dto.BasePageDTO;
 
 import java.util.List;

@@ -178,7 +178,7 @@ public class TokenService {
         // 根据随机产生用户标识生成key
         String userKey = getTokenKey(loginUserDTO.getToken());
         // 生成loginUserDTO缓存
-        redisService.setCacheObject(userKey, loginUserDTO, EXPIRE_TIME, TimeUnit.DAYS);  // todo 修改为分钟
+        redisService.setCacheObject(userKey, loginUserDTO, EXPIRE_TIME, TimeUnit.DAYS);
     }
 
     /**

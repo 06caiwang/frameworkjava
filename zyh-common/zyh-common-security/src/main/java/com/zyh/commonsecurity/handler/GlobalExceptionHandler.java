@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 /**
  * @author zhangyuheng
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
      * 设置http响应码

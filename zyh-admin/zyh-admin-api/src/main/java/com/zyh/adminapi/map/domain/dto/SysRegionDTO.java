@@ -1,6 +1,5 @@
-package com.zyh.adminservice.map.domain.entity;
+package com.zyh.adminapi.map.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,11 +7,10 @@ import java.io.Serializable;
 /**
  * @author zhangyuheng
  */
-@TableName(value = "sys_region")
 @Data
-public class SysRegion implements Serializable {
+public class SysRegionDTO implements Serializable {
     /**
-     * 区域id
+     * 区域ID
      */
     private Long id;
 
@@ -50,14 +48,4 @@ public class SysRegion implements Serializable {
      * 纬度
      */
     private Double latitude;
-
-    /**
-     * 区域编码
-     */
-    private String code;
-
-    /**
-     * 父级区域编码
-     */
-    private String parentCode;
 }

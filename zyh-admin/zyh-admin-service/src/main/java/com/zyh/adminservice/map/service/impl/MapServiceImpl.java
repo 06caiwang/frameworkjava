@@ -2,9 +2,11 @@ package com.zyh.adminservice.map.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.benmanes.caffeine.cache.Cache;
-import com.zyh.adminapi.feign.map.constants.MapConstants;
-import com.zyh.adminapi.feign.map.domain.dto.LocationReqDTO;
-import com.zyh.adminapi.feign.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.constants.MapConstants;
+import com.zyh.adminapi.map.domain.dto.LocationReqDTO;
+import com.zyh.adminapi.map.domain.dto.PlaceSearchReqDTO;
+import com.zyh.adminapi.map.domain.dto.SysRegionDTO;
+import com.zyh.adminservice.config.service.ISysArgumentService;
 import com.zyh.adminservice.map.domain.dto.*;
 import com.zyh.adminservice.map.domain.entity.SysRegion;
 import com.zyh.adminservice.map.mapper.RegionMapper;
@@ -49,12 +51,16 @@ public class MapServiceImpl implements IMapService {
     private ITencentMapService tencentMapService;
 
     /**
+     * 参数服务处理对象
+     */
+    @Autowired
+    private ISysArgumentService sysArgumentService;
+
+    /**
      * 本地缓存服务
      */
     @Autowired
     private Cache<String, Object> caffeineCache;
-    @Autowired
-    private ITencentMapService iTencentMapService;
 
     @PostConstruct
     public void initCityList() {
@@ -198,8 +204,12 @@ public class MapServiceImpl implements IMapService {
      */
     public List<SysRegionDTO> getRegionListV3() {
         // 1. 先进行缓存查询
-        List<SysRegionDTO> cache = CacheUtil.getL2Cache(redisService, MapConstants.CACHE_MAP_CITY_KEY, new TypeReference<List<SysRegionDTO>>() {
-        }, caffeineCache);
+        List<SysRegionDTO> cache = CacheUtil.getL2Cache(
+                redisService,
+                MapConstants.CACHE_MAP_CITY_KEY,
+                new TypeReference<List<SysRegionDTO>>() {},
+                caffeineCache
+        );
 
         // 2.如果存在，直接返回
         //   如果不存在，访问数据库，然后存入redis
@@ -321,8 +331,11 @@ public class MapServiceImpl implements IMapService {
         );
 
         // 2. 设置六个热门城市
-        // todo Mock 6个假数据，后期修改
-        List<Long> idList = List.of(1L,2L,3L,4L,5L,6L);
+        String ids = sysArgumentService.getByConfigKey(MapConstants.CONFIG_KEY).getValue();
+        List<Long> idList = new ArrayList<>();
+        for (String num : ids.split(",")) {
+            idList.add(Long.parseLong(num));
+        }
 
         // 3 查询热门城市结果
         List<SysRegionDTO> list = new ArrayList<>();
@@ -387,7 +400,7 @@ public class MapServiceImpl implements IMapService {
         BeanUtils.copyProperties(locationReqDTO, locationDTO);
 
         // 2. 调用腾讯地图服务
-        GeoResultDTO geoResultDTO = iTencentMapService.getQQMapDistrictByLonLat(locationDTO);
+        GeoResultDTO geoResultDTO = tencentMapService.getQQMapDistrictByLonLat(locationDTO);
 
         // 3. 非空判断 + 从缓存中找到该城市信息
         CityDTO result = new CityDTO();
