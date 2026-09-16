@@ -2,12 +2,13 @@ package com.zyh.adminservice.user.config;
 
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author zhangyuheng
  */
-@Component
+
+@Configuration
 public class RabbitConfig {
     // 交换机的名称
     public final static String EXCHANGE_NAME = "edit_user_exchange";

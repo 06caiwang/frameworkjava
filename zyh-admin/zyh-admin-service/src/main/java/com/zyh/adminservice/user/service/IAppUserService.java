@@ -1,7 +1,11 @@
 package com.zyh.adminservice.user.service;
 
 import com.zyh.adminapi.appuser.domain.dto.AppUserDTO;
+import com.zyh.adminapi.appuser.domain.dto.AppUserListReqDTO;
 import com.zyh.adminapi.appuser.domain.dto.UserEditReqDTO;
+import com.zyh.commoncore.domain.dto.BasePageDTO;
+
+import java.util.List;
 
 /**
  * @author zhangyuheng
@@ -40,4 +44,25 @@ public interface IAppUserService {
      * @param userEditReqDTO C端用户DTO
      */
     void edit(UserEditReqDTO userEditReqDTO);
+
+    /**
+     * 查询C端用户
+     * @param appUserListReqDTO 查询C端用户DTO
+     * @return C端用户分页结果DTO
+     */
+    BasePageDTO<AppUserDTO> getUserList(AppUserListReqDTO appUserListReqDTO);
+
+    /**
+     * 根据用户ID获取用户信息
+     * @param userId 用户ID
+     * @return C端用户DTO
+     */
+    AppUserDTO findById(Long userId);
+
+    /**
+     * 根据用户ID列表获取用户列表信息
+     * @param userIds 用户ID列表
+     * @return C端用户DTO列表
+     */
+    List<AppUserDTO> getUserList(List<Long> userIds);
 }

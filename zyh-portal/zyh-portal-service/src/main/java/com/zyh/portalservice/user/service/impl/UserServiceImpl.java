@@ -11,11 +11,16 @@ import com.zyh.commonmessage.service.CaptchaService;
 import com.zyh.commonsecurity.domain.dto.LoginUserDTO;
 import com.zyh.commonsecurity.domain.dto.TokenDTO;
 import com.zyh.commonsecurity.service.TokenService;
+import com.zyh.commonsecurity.utils.JwtUtil;
+import com.zyh.commonsecurity.utils.SecurityUtil;
 import com.zyh.portalservice.user.domain.dto.CodeLoginDTO;
 import com.zyh.portalservice.user.domain.dto.LoginDTO;
+import com.zyh.portalservice.user.domain.dto.UserDTO;
 import com.zyh.portalservice.user.domain.dto.WechatLoginDTO;
 import com.zyh.portalservice.user.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +133,7 @@ public class UserServiceImpl implements IUserService {
         captchaService.deleteCode(codeLoginDTO.getMail());
 
         // 6. 设置登录信息
+        assert appUserVO != null;
         loginUserDTO.setUserId(appUserVO.getUserId());
         loginUserDTO.setUserName(appUserVO.getNickName());
     }
@@ -169,4 +175,45 @@ public class UserServiceImpl implements IUserService {
             throw new ServiceException("修改用户失败");
         }
     }
+
+    /**
+     * 获取用户登录信息
+     * @return 用户信息DTO
+     */
+    @Override
+    public UserDTO getLoginUser() {
+        // 1 获取当前登录的用户
+        LoginUserDTO loginUserDTO = tokenService.getLoginUser();
+        if (loginUserDTO == null) {
+            throw new ServiceException("用户令牌有误", ResultCode.INVALID_PARA.getCode());
+        }
+        // 2 远程调用获取用户信息
+        R<AppUserVO> result = appUserFeignClient.findById(loginUserDTO.getUserId());
+        if (result == null || result.getCode() != ResultCode.SUCCESS.getCode() || result.getData() == null) {
+            throw new ServiceException("查询用户失败", ResultCode.INVALID_PARA.getCode());
+        }
+        // 3 对象拼装，返回结果
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(loginUserDTO, userDTO);
+        BeanUtils.copyProperties(result.getData(), userDTO);
+        return userDTO;
+    }
+
+    /**
+     * 退出登录
+     */
+    @Override
+    public void logout() {
+        // 1 解析令牌
+        String token = SecurityUtil.getToken();
+        if (StringUtils.isEmpty(token)) {
+            return;
+        }
+        String userName = JwtUtil.getUserName(token);
+        String userId = JwtUtil.getUserId(token);
+        log.info("{}退出了系统, 用户ID{}", userName, userId);
+        // 2 删除用户缓存记录
+        tokenService.delLoginUser(token);
+    }
+
 }

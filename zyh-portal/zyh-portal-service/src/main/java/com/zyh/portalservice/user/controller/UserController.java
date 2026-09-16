@@ -5,6 +5,7 @@ import com.zyh.commondomain.domain.R;
 import com.zyh.commondomain.domain.vo.TokenVO;
 import com.zyh.portalservice.user.domain.dto.CodeLoginDTO;
 import com.zyh.portalservice.user.domain.dto.WechatLoginDTO;
+import com.zyh.portalservice.user.domain.vo.UserVO;
 import com.zyh.portalservice.user.service.IUserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -63,4 +64,22 @@ public class UserController {
         return R.ok();
     }
 
+    /**
+     * 获取用户登录信息
+     * @return 用户信息VO
+     */
+    @GetMapping("/login_info/get")
+    public R<UserVO> getLoginUser() {
+        return R.ok(userService.getLoginUser().convertToVO());
+    }
+
+    /**
+     * 退出登录
+     * @return void
+     */
+    @DeleteMapping("/logout")
+    R<Void> logout() {
+        userService.logout();
+        return R.ok();
+    }
 }
