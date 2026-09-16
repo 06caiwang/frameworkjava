@@ -1,6 +1,7 @@
 package com.zyh.adminservice.user.service;
 
 import com.zyh.adminapi.appuser.domain.dto.AppUserDTO;
+import com.zyh.adminapi.appuser.domain.dto.UserEditReqDTO;
 
 /**
  * @author zhangyuheng
@@ -21,7 +22,7 @@ public interface IAppUserService {
     AppUserDTO findByOpenId(String openId);
 
     /**
-     * 根据手机号查询用户信息
+     * 根据邮箱查询用户信息
      * @param mail 手机号
      * @return C端用户DTO
      */
@@ -33,4 +34,10 @@ public interface IAppUserService {
      * @return C端用户DTO
      */
     AppUserDTO registerByMail(String mail);
+
+    /**
+     * 编辑C端用户
+     * @param userEditReqDTO C端用户DTO
+     */
+    void edit(UserEditReqDTO userEditReqDTO);
 }

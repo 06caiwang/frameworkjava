@@ -1,5 +1,6 @@
 package com.zyh.portalservice.user.service.impl;
 
+import com.zyh.adminapi.appuser.domain.dto.UserEditReqDTO;
 import com.zyh.adminapi.appuser.domain.vo.AppUserVO;
 import com.zyh.adminapi.appuser.feign.AppUserFeignClient;
 import com.zyh.commoncore.utils.VerifyUtil;
@@ -148,7 +149,6 @@ public class UserServiceImpl implements IUserService {
                 log.error("用户注册失败! {}", wechatLoginDTO.getOpenId());
             }
         } else if (loginDTO instanceof CodeLoginDTO codeLoginDTO) {
-
             // 3 处理邮箱注册逻辑
             result = appUserFeignClient.registerByMail(codeLoginDTO.getMail());
             if (result == null || result.getCode() != ResultCode.SUCCESS.getCode() || result.getData() == null) {
@@ -156,5 +156,17 @@ public class UserServiceImpl implements IUserService {
             }
         }
         return result == null ? null : result.getData();
+    }
+
+    /**
+     * 修改用户信息
+     * @param userEditReqDTO C端用户编辑DTO
+     */
+    @Override
+    public void edit(UserEditReqDTO userEditReqDTO) {
+        R<Void> result = appUserFeignClient.edit(userEditReqDTO);
+        if (result == null || result.getCode() != ResultCode.SUCCESS.getCode()) {
+            throw new ServiceException("修改用户失败");
+        }
     }
 }

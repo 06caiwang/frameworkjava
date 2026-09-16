@@ -1,6 +1,7 @@
 package com.zyh.adminservice.user.controller;
 
 import com.zyh.adminapi.appuser.domain.dto.AppUserDTO;
+import com.zyh.adminapi.appuser.domain.dto.UserEditReqDTO;
 import com.zyh.adminapi.appuser.domain.vo.AppUserVO;
 import com.zyh.adminapi.appuser.feign.AppUserFeignClient;
 import com.zyh.adminservice.user.service.IAppUserService;
@@ -72,5 +73,16 @@ public class AppUserController implements AppUserFeignClient {
             throw new ServiceException("注册失败");
         }
         return R.ok(appUserDTO.convertToVO());
+    }
+
+    /**
+     * 编辑C端用户
+     * @param userEditReqDTO C端用户DTO
+     * @return void
+     */
+    @Override
+    public R<Void> edit(UserEditReqDTO userEditReqDTO) {
+        appUserService.edit(userEditReqDTO);
+        return R.ok();
     }
 }

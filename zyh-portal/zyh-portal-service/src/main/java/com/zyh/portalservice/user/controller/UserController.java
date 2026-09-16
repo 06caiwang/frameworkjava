@@ -1,5 +1,6 @@
 package com.zyh.portalservice.user.controller;
 
+import com.zyh.adminapi.appuser.domain.dto.UserEditReqDTO;
 import com.zyh.commondomain.domain.R;
 import com.zyh.commondomain.domain.vo.TokenVO;
 import com.zyh.portalservice.user.domain.dto.CodeLoginDTO;
@@ -50,4 +51,16 @@ public class UserController {
     public R<TokenVO> login(@RequestBody @Validated CodeLoginDTO codeLoginDTO) {
         return R.ok(userService.login(codeLoginDTO).convertToVo());
     }
+
+    /**
+     * 修改用户信息
+     * @param userEditReqDTO C端用户编辑DTO
+     * @return void
+     */
+    @PostMapping("/edit")
+    public R<Void> edit(@RequestBody @Validated UserEditReqDTO userEditReqDTO) {
+        userService.edit(userEditReqDTO);
+        return R.ok();
+    }
+
 }
