@@ -59,6 +59,10 @@ public enum ResultCode {
      */
     USER_DISABLE                      (400007, "账号已停用，登录失败"),
 
+    /**
+     * 邮箱已经存在
+     */
+    MAIL_EXISTS                         (400008, "邮箱已存在"),
     //401
 
     /**

@@ -110,9 +110,15 @@ public class AppUserServiceImpl implements IAppUserService {
         if (StringUtils.isEmpty(mail)) {
             throw new ServiceException("要注册邮箱是空的", ResultCode.INVALID_PARA.getCode());
         }
-        // 2 生成用户对象
+
+        // 2. 查询是否存存在该邮箱
+        AppUser cache = appUserMapper.selectByMail(mail);
+        if (cache != null) {
+            throw new ServiceException("该邮箱已注册，请勿重复注册", ResultCode.MAIL_EXISTS.getCode());
+        }
+
+        // 3. 生成用户对象
         AppUser appUser = new AppUser();
-//        appUser.setPhoneNumber(AESUtil.encryptHex(phoneNumber));
         appUser.setNickName("用户"+ (int) (Math.random() * 9000) + 1000);
         appUser.setAvatar(defaultAvatar);
         appUserMapper.insert(appUser);

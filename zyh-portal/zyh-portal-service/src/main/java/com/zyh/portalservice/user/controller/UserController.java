@@ -33,12 +33,12 @@ public class UserController {
 
     /**
      * 发送短信验证码
-     * @param phone 手机号
+     * @param mail 手机号
      * @return 验证码
      */
     @GetMapping("/send_code")
-    public R<String> sendCode(String phone) {
-        return R.ok(userService.sendCode(phone));
+    public R<String> sendCode(String mail) {
+        return R.ok(userService.sendCode(mail));
     }
 
     /**
