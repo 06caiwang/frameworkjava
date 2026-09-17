@@ -20,6 +20,11 @@ public class SysRegionDTO implements Serializable {
     private String name;
 
     /**
+     * 行政编码
+     */
+    private String code;
+
+    /**
      * 区域全称
      */
     private String fullName;

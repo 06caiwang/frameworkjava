@@ -20,6 +20,11 @@ public class CityDTO {
     private String name;
 
     /**
+     * 行政编码
+     */
+    private String code;
+
+    /**
      * 城市全称
      */
     private String fullName;

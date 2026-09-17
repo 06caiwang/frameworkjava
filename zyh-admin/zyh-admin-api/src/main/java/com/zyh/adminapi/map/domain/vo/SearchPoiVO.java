@@ -9,6 +9,11 @@ import lombok.Data;
 @Data
 public class SearchPoiVO {
     /**
+     * 行政编码
+     */
+    private String code;
+
+    /**
      * 地点名称
      */
     private String title;

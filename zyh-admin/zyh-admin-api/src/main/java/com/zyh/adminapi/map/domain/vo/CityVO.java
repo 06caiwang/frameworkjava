@@ -15,6 +15,11 @@ public class CityVO {
     private Long id;
 
     /**
+     * 行政编码
+     */
+    private String code;
+
+    /**
      * 城市名称
      */
     private String name;
