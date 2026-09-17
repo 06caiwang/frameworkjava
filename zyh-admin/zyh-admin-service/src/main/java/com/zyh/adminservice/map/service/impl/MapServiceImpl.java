@@ -322,13 +322,12 @@ public class MapServiceImpl implements IMapService {
 
     @Override
     public List<SysRegionDTO> getHotCityList() {
-        // 1. 查询缓存
-        CacheUtil.getL2Cache(
-                redisService,
-                MapConstants.CACHE_MAP_HOT_CITY,
-                new TypeReference<SysRegionDTO>() {},
-                caffeineCache
-        );
+        // 1 先查缓存
+        List<SysRegionDTO> hotCityList = CacheUtil.getL2Cache(redisService, MapConstants.CACHE_MAP_HOT_CITY, new TypeReference<List<SysRegionDTO>>() {
+        }, caffeineCache);
+        if (hotCityList != null) {
+            return hotCityList;
+        }
 
         // 2. 设置六个热门城市
         String ids = sysArgumentService.getByConfigKey(MapConstants.CONFIG_KEY).getValue();
